@@ -20,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 
 public class GuiClient extends JFrame implements KeyListener{
 
@@ -39,8 +40,11 @@ public class GuiClient extends JFrame implements KeyListener{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiClient frame = new GuiClient("phan");
+					String s = JOptionPane.showInputDialog("Mời bạn nhập tên"); 
+					
+					GuiClient frame = new GuiClient(s);
 					frame.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -60,7 +64,7 @@ public class GuiClient extends JFrame implements KeyListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		 textPane = new JTextField();
+		textPane = new JTextField();
 		textPane.setBounds(10, 10, 416, 29);
 		textPane.addKeyListener(this);
 		contentPane.add(textPane);
