@@ -51,6 +51,7 @@ public class Sender {
     	 
     	           
     }
+    
     public Sender(String username) {
     	this.username = username; 
          key = new Scanner(System.in); 
@@ -131,7 +132,7 @@ public class Sender {
 					System.out.println( packet.getUsename()+ "( "+inPacket.getAddress()+"): " + packet.getMess());
 				}else if(this.username.equals(packet.getNameReceive()) )
 					System.out.println( packet.getUsename()+ "( "+inPacket.getAddress()+"): " + packet.getMess());
-				
+	
 			}
 		
 
