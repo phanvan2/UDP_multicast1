@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.Vector;
 
 
+
  
 public class Receive {
  
@@ -24,6 +25,8 @@ public class Receive {
     InetAddress address = null ;
     Scanner key ; 
     Vector<String> contact = new Vector<String>() ; 
+    Vector<Group> GROUP = new Vector<Group>(); 
+    
     public Receive() {
     	 try {
     		 key = new Scanner(System.in); 
@@ -46,14 +49,58 @@ public class Receive {
 			socket.receive(inPacket);
 			Packet packet = (Packet) deserialize(inPacket.getData()) ;
 			
-			if(packet.getMess().equals("&&&batdauketnoi")) {
+			if(packet.getMess().contains("net join group")) {
+				String[] arr = packet.getMess().split(" "); 
+				String nameGroup =  arr[3] ;  
+				
+				boolean check = false; 
+				for (Group group : GROUP) {
+					if(nameGroup.equals(group.nameGroup)) {
+						group.addThanhVien(packet.getUsename());
+						sendMess(new Packet(packet.getUsename(), packet.getUsename(), "join group " + nameGroup + " success"));
+						check = true;
+						break;
+					}
+				}
+				if(!check) {
+					GROUP.add(new Group(nameGroup, packet.getUsename())); 
+					sendMess(new Packet(packet.getUsename(), packet.getUsename(), "join group " + nameGroup + " success"));
+
+				}
+				
+				
+			}else if(packet.getMess().contains("net send group")){
+				System.out.println("da nhan"); 
+				String[] arr = packet.getMess().split(" "); 
+				String nameGroup = arr[3]; 
+				String mess = ""; 
+				for (int i = 4  ; i < arr.length; i ++) {
+					mess = mess + arr[i] + " "; 
+				}
+				for (Group group : GROUP) {
+					System.out.println(group.nameGroup);
+					if(nameGroup.equals(group.nameGroup)) {
+						for(String namereceive : group.thanhVien) {
+							System.out.println(namereceive);
+							if(!namereceive.equals(packet.getUsename()))
+								sendMess(new Packet(packet.getUsename(), namereceive, mess ));
+						}
+						break;
+					}
+				}
+    		}else if(packet.getMess().equals("&&&remove")) {
+				contact.removeElement(packet.getUsename()) ; 
+			}else if(packet.getMess().equals("&&&batdauketnoi")) {
 				contact.add(packet.getUsename()); 
 			}else if(packet.getMess().equals("show contact")) {
-				System.out.println(":" + contact);
+				
+				//System.out.println(":" + contact);
+				sendMess(new Packet(packet.getUsename(), packet.getUsename(), contact.toString()));
+
 			}else {
 				String[] arr = packet.getMess().split(" "); 
-				System.out.println(arr.length);
-				System.out.println(arr[2]); 
+				//System.out.println(arr.length);
+				//System.out.println(arr[2]); 
 
 					String messSend = ""; 
 					for (int i = 3 ; i < arr.length; i ++) {
@@ -62,6 +109,7 @@ public class Receive {
 					sendMess(new Packet(packet.getUsename(), arr[2], messSend));
 			
 			}
+			
 			
 
 		} catch (Exception e) {
@@ -113,3 +161,4 @@ public class Receive {
         return is.readObject();
     }
 }
+

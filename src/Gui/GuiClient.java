@@ -2,10 +2,17 @@ package Gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -64,6 +71,15 @@ public class GuiClient extends JFrame implements KeyListener{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		
+		try {// set icon giao dien---------------------------
+			Image iconmes = ImageIO.read(new File("icon.jpg"));
+			this.setIconImage(iconmes); 
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+		
+		}
+		
 		textPane = new JTextField();
 		textPane.setBounds(10, 10, 416, 29);
 		textPane.addKeyListener(this);
@@ -97,6 +113,14 @@ public class GuiClient extends JFrame implements KeyListener{
 				}
 			}
 		}).start();
+		
+		this.addWindowListener(new WindowAdapter() {
+			 public void windowClosed(WindowEvent e) {
+			       
+			 }
+			    public void windowClosing(WindowEvent e) {
+			    	sender.sendMess("&&&remove");			    }
+		});
 
 	}
 
