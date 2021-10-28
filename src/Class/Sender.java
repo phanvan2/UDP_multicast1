@@ -134,7 +134,7 @@ public class Sender {
 					System.out.println( packet.getUsename()+ "( "+inPacket.getAddress()+"): " + packet.getMess());
 	
 			}
-		
+
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -151,10 +151,12 @@ public class Sender {
 			Packet packet = (Packet) deserialize(inPacket.getData()) ;
 		
 			
-			
+			if( packet.getUsename().equals(packet.getNameReceive()) && packet.getUsename().equals(this.username)) {
+				return ( "contact:  " + packet.getMess());
+
+			}
 			
 			if( !this.username.equals(packet.getUsename()) ) {
-				System.out.println("hahaha");
 				int i = (int)(packet.getNameReceive().charAt(0)); 
 				if(i  == 42 ) {
 					return ( packet.getUsename()+ "( "+inPacket.getAddress()+"): " + packet.getMess());
